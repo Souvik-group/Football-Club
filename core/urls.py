@@ -1,0 +1,28 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('news/', views.news_page, name='news_page'),
+    path('events/', views.events_page, name='events_page'),
+    path('team/', views.team_page, name='team_page'),
+    path('about/', views.about_page, name='about_page'),
+    path('admin-login/', views.admin_login, name='admin_login'),
+    path('dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('admin-logout/', views.admin_logout, name='admin_logout'),
+    path('dashboard/news/', views.news_manage, name='news_manage'),
+    path('dashboard/news/success/', views.news_manage_success, name='news_manage_success'),
+    path('dashboard/news/delete/<int:pk>/', views.news_delete, name='news_delete'),
+    path('dashboard/media/', views.media_manage, name='media_manage'),
+    path('dashboard/media/success/', views.media_manage_success, name='media_manage_success'),
+    path('dashboard/media/delete/<int:pk>/', views.media_delete, name='media_delete'),
+    path('dashboard/announcements/', views.announcement_manage, name='announcement_manage'),
+    path('dashboard/announcements/success/', views.announcement_manage_success, name='announcement_manage_success'),
+    path('dashboard/events/', views.event_manage, name='event_manage'),
+    path('dashboard/events/success/', views.event_manage_success, name='event_manage_success'),
+    path('dashboard/events/delete/<int:pk>/', views.event_delete, name='event_delete'),
+    path('dashboard/team/', views.team_manage, name='team_manage'),
+    path('dashboard/team/success/', views.team_manage_success, name='team_manage_success'),
+    path('dashboard/team/edit/<int:pk>/', views.team_manage, name='team_edit'),
+    path('dashboard/team/delete/<int:pk>/', views.team_delete, name='team_delete'),
+]

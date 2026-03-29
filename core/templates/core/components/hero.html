@@ -1,0 +1,133 @@
+{% load static %}
+
+<section class="hero" id="home">
+
+<div class="slider">
+
+<img src="{% static 'images/ground.png' %}" class="slide active">
+<img src="{% static 'images/group.png' %}" class="slide">
+<video src="{% static 'videos/video1.mp4' %}" class="slide" autoplay muted loop playsinline></video>
+
+</div>
+
+<div class="hero-content">
+<h1>
+    Welcome to <br>
+    <span class= "typing-text"></span>
+</h1>
+
+<p class="subtitle">Join the Ultimate Football Community</p>
+
+<div class="hero-buttons">
+<a href="#" class="btn-primary">JOIN THE CLUB</a>
+<a href="#" class="btn-secondary">UPCOMING MATCHES</a>
+</div>
+
+</div>
+
+<!-- arrows -->
+
+<button class="arrow left" onclick="prevSlide()">❮</button>
+<button class="arrow right" onclick="nextSlide()">❯</button>
+
+<!-- dots -->
+
+<div class="dots">
+<span onclick="currentSlide(0)"></span>
+<span onclick="currentSlide(1)"></span>
+<span onclick="currentSlide(2)"></span>
+
+</div>
+
+</section>
+
+
+<script>
+
+let slides = document.querySelectorAll(".slide")
+let dots = document.querySelectorAll(".dots span")
+let slideIndex = 0
+
+// Ensure dots match the initial active slide
+showSlide(slideIndex)
+
+function showSlide(i){
+
+slides.forEach(slide => slide.classList.remove("active"))
+dots.forEach(dot => dot.classList.remove("active"))
+
+slides[i].classList.add("active")
+dots[i].classList.add("active")
+
+}
+
+function nextSlide(){
+slideIndex++
+
+if(slideIndex >= slides.length){
+slideIndex = 0
+}
+
+showSlide(slideIndex)
+}
+
+function prevSlide(){
+slideIndex--
+
+if(slideIndex < 0){
+slideIndex = slides.length-1
+}
+
+showSlide(slideIndex)
+}
+
+function currentSlide(i){
+slideIndex = i
+showSlide(slideIndex)
+}
+
+/* auto slide */
+
+setInterval(()=>{
+nextSlide()
+},4000)
+
+
+
+let text = "Arjungeria AGNI Sangha";
+let index = 0;
+let isDeleting = false;
+
+function typingEffect(){
+
+let element = document.querySelector(".typing-text");
+
+if(!isDeleting){
+    element.innerHTML = text.substring(0, index + 1);
+    index++;
+
+    if(index == text.length){
+        isDeleting = true;
+        setTimeout(typingEffect, 1000); // pause before deleting
+        return;
+    }
+
+}else{
+    element.innerHTML = text.substring(0, index - 1);
+    index--;
+
+    if(index == 0){
+        isDeleting = false;
+    }
+}
+
+let speed = isDeleting ? 80 : 120;
+
+setTimeout(typingEffect, speed);
+}
+
+typingEffect();
+
+
+
+</script>

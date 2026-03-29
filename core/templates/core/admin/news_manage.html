@@ -1,0 +1,329 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage News</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+
+body {
+    display: flex;
+    min-height: 100vh;
+    background: #0f1f17;
+    color: white;
+}
+
+.sidebar {
+    width: 240px;
+    background: linear-gradient(180deg, #0a2e1f, #174c37);
+    display: flex;
+    flex-direction: column;
+    padding: 30px 0;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    position: fixed;
+    height: 100vh;
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 20px 30px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-logo img { width: 36px; }
+.sidebar-logo span { font-size: 13px; font-weight: bold; color: #f0c15b; line-height: 1.3; }
+
+.sidebar-nav { flex: 1; padding: 20px 0; }
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.sidebar-nav a:hover, .sidebar-nav a.active {
+    background: rgba(255,255,255,0.08);
+    color: #f0c15b;
+    border-left: 3px solid #f0c15b;
+}
+
+.sidebar-bottom {
+    padding: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.profile-info { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+
+.profile-avatar {
+    width: 38px; height: 38px;
+    background: #f0c15b;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; color: #0a2e1f; font-size: 16px;
+}
+
+.profile-name { font-size: 13px; font-weight: 600; color: white; }
+.profile-role { font-size: 11px; color: rgba(255,255,255,0.4); }
+
+.logout-btn {
+    display: flex; align-items: center; gap: 8px;
+    width: 100%; padding: 10px 14px;
+    background: rgba(220,50,50,0.15);
+    border: 1px solid rgba(220,50,50,0.3);
+    border-radius: 8px; color: #ff8080;
+    font-size: 13px; cursor: pointer;
+    text-decoration: none; transition: 0.3s;
+}
+
+.logout-btn:hover { background: rgba(220,50,50,0.3); }
+
+/* Main */
+.main { margin-left: 240px; flex: 1; padding: 40px; }
+
+.main h1 { font-size: 24px; color: #f0c15b; margin-bottom: 30px; }
+
+/* Upload Form */
+.upload-form {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 40px;
+}
+
+.upload-form h2 { font-size: 16px; color: white; margin-bottom: 20px; }
+
+.form-group { margin-bottom: 16px; }
+
+.form-group label { display: block; font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 6px; }
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.form-group input:focus, .form-group textarea:focus {
+    border-color: #f0c15b;
+}
+
+.form-group textarea { resize: vertical; min-height: 100px; }
+
+.submit-btn {
+    padding: 11px 28px;
+    background: #f0c15b;
+    color: #0a2e1f;
+    font-weight: 700;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.submit-btn:hover { background: #e0b040; }
+
+.success-msg {
+    background: rgba(34,197,94,0.15);
+    border: 1px solid rgba(34,197,94,0.3);
+    color: #4ade80;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+/* News List */
+.news-list { display: flex; flex-direction: column; gap: 16px; }
+
+.news-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.news-item img {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.news-item-info { flex: 1; }
+.news-item-info h3 { font-size: 15px; color: white; margin-bottom: 4px; }
+.news-item-info span { font-size: 12px; color: rgba(255,255,255,0.4); }
+
+.delete-btn {
+    padding: 7px 14px;
+    background: rgba(220,50,50,0.15);
+    border: 1px solid rgba(220,50,50,0.3);
+    border-radius: 6px;
+    color: #ff8080;
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.delete-btn:hover { background: rgba(220,50,50,0.35); }
+
+.empty { color: rgba(255,255,255,0.3); font-size: 14px; }
+
+.topbar {
+    display: none;
+    background: #0a2e1f;
+    padding: 12px 20px;
+    align-items: center;
+    gap: 15px;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.menu-toggle {
+    font-size: 20px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    z-index: 999;
+}
+
+.overlay.active { display: block; }
+
+@media (max-width: 768px) {
+    .topbar { display: flex; }
+    .sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        width: 240px;
+        height: 100%;
+        z-index: 1000;
+        transition: 0.3s;
+    }
+    .sidebar.active { left: 0; }
+    .main { margin-left: 0; padding: 20px; }
+    body { flex-direction: column; }
+    .news-item { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-logo">
+        <img src="{% static 'images/logo.png' %}" alt="logo">
+        <span>AGNI Sangha<br>Admin</span>
+    </div>
+    <nav class="sidebar-nav">
+        <a href="{% url 'admin_dashboard' %}"><span>🏠</span> Dashboard</a>
+        <a href="{% url 'news_manage' %}" class="active"><span>📰</span> News</a>
+    </nav>
+    <div class="sidebar-bottom">
+        <div class="profile-info">
+            <div class="profile-avatar">{{ request.user.username|first|upper }}</div>
+            <div>
+                <div class="profile-name">{{ request.user.username }}</div>
+                <div class="profile-role">Administrator</div>
+            </div>
+        </div>
+        <a href="{% url 'admin_logout' %}" class="logout-btn">🚪 Logout</a>
+    </div>
+</div>
+
+<div class="overlay" onclick="toggleSidebar()"></div>
+<div class="topbar">
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+    <span>News</span>
+</div>
+
+<div class="main">
+    <h1>📰 Manage News</h1>
+
+    {% if success %}
+    <div class="success-msg">✅ News published successfully!</div>
+    {% endif %}
+
+    <!-- Upload Form -->
+    <div class="upload-form">
+        <h2>Add New Post</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="title" placeholder="News title" required>
+            </div>
+            <div class="form-group">
+                <label>Content</label>
+                <textarea name="content" placeholder="Write news content..." required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Cover Image (optional)</label>
+                <input type="file" name="cover_image" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>Attachment — PDF or Image (optional)</label>
+                <input type="file" name="attachment" accept="image/*,.pdf">
+            </div>
+            <button type="submit" class="submit-btn">Publish News</button>
+        </form>
+    </div>
+
+    <!-- News List -->
+    <div class="news-list">
+        {% if news_list %}
+            {% for news in news_list %}
+            <div class="news-item">
+                {% if news.cover_image %}
+                <img src="{{ news.cover_image.url }}" alt="">
+                {% endif %}
+                <div class="news-item-info">
+                    <h3>{{ news.title }}</h3>
+                    <span>{{ news.created_at|date:"F d, Y" }}</span>
+                    {% if news.attachment %}<span style="color:#f0c15b"> &nbsp;📎 Attachment</span>{% endif %}
+                </div>
+                <a href="{% url 'news_delete' news.id %}" class="delete-btn" onclick="return confirm('Delete this news?')">🗑 Delete</a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="empty">No news posted yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('active');
+    document.querySelector('.overlay').classList.toggle('active');
+}
+</script>
+
+</body>
+</html>

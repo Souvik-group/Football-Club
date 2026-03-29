@@ -1,0 +1,296 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Arjungeria AGNI Sangha</title>
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/contact.css' %}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,800;0,900;1,400;1,700;1,800;1,900&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #05140d;
+            color: #ffffff;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Remove default margins for cleaner section setup */
+        #about-wrapper {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 8%;
+            overflow: hidden;
+            background: url('{% static "images/team.png" %}') no-repeat right center/cover;
+        }
+
+        /* Add a secondary fallback if team.png doesn't load */
+        .fallback-bg {
+            background-color: #0c1c13;
+        }
+
+        /* Dark overlay for cinema contrast */
+        .overlay-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(1, 15, 6, 0.95) 0%, rgba(1, 15, 6, 0.6) 40%, rgba(0, 0, 0, 0.1) 100%);
+            z-index: 1;
+        }
+
+        /* Large Green Glow behind the text */
+        .overlay-glow-left {
+            position: absolute;
+            top: 40%;
+            left: 0%;
+            width: 50vh;
+            height: 50vh;
+            transform: translateY(-50%);
+            background: radial-gradient(circle, rgba(58, 222, 107, 0.35) 0%, transparent 70%);
+            filter: blur(60px);
+            z-index: 1;
+            mix-blend-mode: screen;
+        }
+
+        /* Subtle green glow on the bottom right */
+        .overlay-glow-bottom {
+            position: absolute;
+            bottom: -20%;
+            right: 10%;
+            width: 70vw;
+            height: 50vh;
+            background: radial-gradient(ellipse, rgba(46, 204, 113, 0.2) 0%, transparent 60%);
+            filter: blur(80px);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Cinematic light sweeps */
+        .light-sweep-1 {
+            position: absolute;
+            top: 25%;
+            left: -10%;
+            width: 120%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, rgba(175, 255, 192, 0.6) 50%, transparent 100%);
+            box-shadow: 0 0 15px rgba(175, 255, 192, 0.8);
+            transform: rotate(-10deg);
+            z-index: 2;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .light-sweep-2 {
+            position: absolute;
+            bottom: 20%;
+            left: -10%;
+            width: 120%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, rgba(175, 255, 192, 0.6) 50%, transparent 100%);
+            box-shadow: 0 0 15px rgba(175, 255, 192, 0.8);
+            transform: rotate(5deg);
+            z-index: 2;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        /* Main Content Containment */
+        .about-content {
+            position: relative;
+            z-index: 3;
+            max-width: 650px;
+        }
+
+        /* Typography */
+        .heading-we-are {
+            font-size: 4.5rem;
+            font-weight: 900;
+            font-style: italic;
+            line-height: 1;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.8);
+        }
+
+        .heading-agni {
+            font-size: 7.5rem;
+            font-weight: 900;
+            font-style: italic;
+            line-height: 0.9;
+            margin: 0 0 30px 0;
+            text-transform: uppercase;
+            /* Gradient for the bright green AGNI text */
+            background: linear-gradient(180deg, #e4ffe8 0%, #8cf89f 40%, #50d268 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0px 5px 40px rgba(97, 255, 126, 0.5);
+            letter-spacing: 1px;
+        }
+
+        /* Glassmorphism Card */
+        .glass-panel {
+            background: rgba(16, 38, 25, 0.25);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(135, 245, 153, 0.2);
+            border-radius: 20px;
+            padding: 45px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        /* Glow effect on the left edge of the card */
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent 0%, rgba(135, 245, 153, 0.8) 50%, transparent 100%);
+            box-shadow: 0 0 15px rgba(135, 245, 153, 0.8);
+            border-radius: 20px 0 0 20px;
+        }
+
+        .glass-panel p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: #e0e6e2;
+            font-weight: 400;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+            letter-spacing: 0.3px;
+        }
+
+        .glass-panel p:last-of-type {
+            margin-bottom: 40px;
+        }
+
+        /* Glowing Read More Button */
+        .btn-glow {
+            display: inline-block;
+            background: linear-gradient(180deg, #81e26b 0%, #46a22f 100%);
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 16px 45px;
+            border-radius: 50px;
+            border: 2px solid #cefac9;
+            box-shadow: 
+                0 0 25px rgba(111, 236, 134, 0.6), 
+                inset 0 4px 5px rgba(255, 255, 255, 0.7),
+                inset 0 -3px 5px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+        }
+
+        .btn-glow::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 10%;
+            width: 80%;
+            height: 35%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 100%);
+            border-radius: 50px;
+            pointer-events: none;
+        }
+
+        .btn-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 0 35px rgba(111, 236, 134, 0.8), 
+                inset 0 4px 6px rgba(255, 255, 255, 0.9), 
+                inset 0 -3px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-glow:active {
+            transform: translateY(1px);
+            box-shadow: 
+                0 0 15px rgba(111, 236, 134, 0.5), 
+                inset 0 2px 4px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            #about-wrapper {
+                padding: 120px 5%;
+                background-position: center center;
+            }
+            .heading-we-are {
+                font-size: 3.5rem;
+            }
+            .heading-agni {
+                font-size: 5.5rem;
+            }
+            .overlay-gradient {
+                background: linear-gradient(to right, rgba(1, 15, 6, 0.95) 0%, rgba(1, 15, 6, 0.8) 60%, rgba(0, 0, 0, 0.4) 100%);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .heading-we-are {
+                font-size: 2.8rem;
+            }
+            .heading-agni {
+                font-size: 4.5rem;
+                margin-bottom: 20px;
+            }
+            .glass-panel {
+                padding: 30px 20px;
+            }
+            .glass-panel p {
+                font-size: 1rem;
+            }
+            .btn-glow {
+                padding: 14px 35px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="fallback-bg">
+
+{% include "core/components/navbar.html" %}
+
+<section id="about-wrapper">
+    <!-- Cinematic Layers -->
+    <div class="overlay-gradient"></div>
+    <div class="overlay-glow-left"></div>
+    <div class="overlay-glow-bottom"></div>
+    <div class="light-sweep-1"></div>
+    <div class="light-sweep-2"></div>
+
+    <!-- Content Area -->
+    <div class="about-content">
+        <h1 class="heading-we-are">WE ARE</h1>
+        <h2 class="heading-agni">AGNI</h2>
+
+        <div class="glass-panel">
+            <p>Arjungeria AGNI Sangha is a passionate football club dedicated to promoting sportsmanship, teamwork, excellence in football. Our club has been a center for young talent and community spirit.</p>
+            <p>We organize regular matches, training sessions, and tournaments to develop players and encourage football culture in our area. Our mission is to build a striving football community and inspire the next generation of players.</p>
+        </div>
+    </div>
+</section>
+
+{% include "core/components/contact.html" %}
+{% include "core/components/footer.html" %}
+
+</body>
+</html>

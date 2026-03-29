@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upcoming Events — AGNI Sangha</title>
+<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+body { background: #f4f6f8; color: #1c2b36; }
+
+.page-hero {
+    background: linear-gradient(135deg, #f4f6f8, #eef1f5);
+    padding: 60px 0 40px;
+    text-align: center;
+    border-bottom: 2px solid rgba(197,160,89,0.2);
+}
+
+.page-hero h1 { font-size: 36px; color: #c5a059; margin-bottom: 8px; }
+.page-hero p { color: #4a5568; font-size: 14px; }
+
+.events-wrapper {
+    width: 90%;
+    max-width: 900px;
+    margin: 50px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.event-card {
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 14px;
+    padding: 22px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    transition: transform 0.2s;
+}
+
+.event-card:hover { transform: translateX(4px); }
+
+.event-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+}
+
+.icon-match { background: rgba(197,160,89,0.12); border: 1px solid rgba(197,160,89,0.3); }
+.icon-event { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3); }
+
+.event-body { flex: 1; }
+
+.event-tag {
+    display: inline-block;
+    padding: 2px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.tag-match { background: rgba(197,160,89,0.12); color: #c5a059; border: 1px solid rgba(197,160,89,0.3); }
+.tag-event { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+
+.event-body h2 { font-size: 20px; color: #1c2b36; margin-bottom: 10px; }
+
+.vs { color: #4a5568; font-size: 16px; font-weight: normal; }
+
+.event-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 14px;
+    color: #4a5568;
+    margin-bottom: 10px;
+}
+
+.event-desc { font-size: 13px; color: #4a5568; line-height: 1.7; }
+
+.empty { text-align: center; color: #4a5568; padding: 60px 0; font-size: 15px; }
+
+@media (max-width: 768px) {
+    .page-hero h1 { font-size: 26px; }
+    .event-card { flex-wrap: wrap; }
+    .event-meta { gap: 10px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+{% include "core/components/navbar.html" %}
+
+<div class="page-hero">
+    <h1>📅 Upcoming Matches & Events</h1>
+    <p>Arjungeria AGNI Sangha — Schedule</p>
+</div>
+
+<div class="events-wrapper">
+    {% for ev in events %}
+    <div class="event-card">
+        <div class="event-icon {% if ev.type == 'match' %}icon-match{% else %}icon-event{% endif %}">
+            {% if ev.type == 'match' %}⚽{% else %}📅{% endif %}
+        </div>
+        <div class="event-body">
+            <span class="event-tag {% if ev.type == 'match' %}tag-match{% else %}tag-event{% endif %}">
+                {{ ev.get_type_display }}
+            </span>
+            <h2>{{ ev.title }}{% if ev.opponent %} <span class="vs">vs {{ ev.opponent }}</span>{% endif %}</h2>
+            <div class="event-meta">
+                <span>📆 {{ ev.date|date:"F d, Y" }}</span>
+                {% if ev.time %}<span>⏰ {{ ev.time|time:"h:i A" }}</span>{% endif %}
+                {% if ev.venue %}<span>📍 {{ ev.venue }}</span>{% endif %}
+            </div>
+            {% if ev.description %}<p class="event-desc">{{ ev.description }}</p>{% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <p class="empty">No upcoming matches or events.</p>
+    {% endfor %}
+</div>
+
+</body>
+</html>

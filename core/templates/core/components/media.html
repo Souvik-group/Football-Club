@@ -1,0 +1,504 @@
+{% if media_images or media_videos %}
+<section class="media-section" id="gallery-section">
+    <!-- Subtle animated background gradient glow -->
+    <div class="glow-bg"></div>
+
+    <div class="media-container">
+        <div class="media-heading">
+            <h2 class="glitch-text" data-text="Our Gallery">Our Gallery</h2>
+            <p>Experience the action on the ground</p>
+        </div>
+
+        {% if media_images %}
+        <div class="media-row-label">
+            <span class="icon">📸</span> Featured Captures
+        </div>
+        <div class="scroll-wrapper">
+            <div class="scroll-track scroll-ltr" id="imgTrack">
+                {% for item in media_images %}
+                <div class="media-card img-card" onclick="openLightbox('{{ item.file.url }}', '{{ item.title }}')">
+                    <img src="{{ item.file.url }}" alt="{{ item.title }}" loading="lazy">
+                    <div class="card-glass-overlay">
+                        <span class="card-title">{{ item.title }}</span>
+                        <span class="view-btn">View</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if media_videos %}
+        <div class="media-row-label" style="margin-top: 50px;">
+            <span class="icon">🎥</span> Ground Footage
+        </div>
+        <div class="scroll-wrapper">
+            <div class="scroll-track scroll-rtl" id="vidTrack">
+                {% for item in media_videos %}
+                <div class="media-card vid-card">
+                    <video src="{{ item.file.url }}" muted loop playsinline preload="metadata"
+                        onmouseenter="this.play()" onmouseleave="this.pause()"></video>
+                    <div class="play-icon glass-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                    <div class="card-glass-overlay">
+                        <span class="card-title">{{ item.title }}</span>
+                        <span class="view-btn">Play</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Fullscreen Image Lightbox -->
+<div id="lightbox" class="lightbox">
+    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <img class="lightbox-content" id="lightbox-img">
+    <div id="lightbox-caption"></div>
+</div>
+
+<style>
+/* ============================================
+   ADVANCED PREMIUM STYLES
+   ============================================ */
+:root {
+    --primary-gold: #c5a059;
+    --primary-emerald: #50b74f;
+    --dark-bg: #0b2d12;
+    --card-bg: #111f12;
+    --card-soft: #172a1c;
+    --glass-border: rgba(26, 110, 60, 0.2);
+    --glass-bg: rgba(33, 62, 34, 0.62);
+}
+
+.media-section {
+    position: relative;
+    background-color: var(--dark-bg);
+    padding: 90px 0 100px;
+    overflow: hidden;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Animated subtle background glow */
+.glow-bg {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 50% 50%, rgba(240,193,91,0.05) 0%, transparent 60%);
+    animation: pulseGlow 8s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes pulseGlow {
+    0% { transform: scale(1) translate(0, 0); }
+    100% { transform: scale(1.1) translate(2%, 2%); }
+}
+
+.media-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.media-heading {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.media-heading h2 {
+    font-size: 42px;
+    color: #1c2b36;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+    position: relative;
+    display: inline-block;
+    background: linear-gradient(135deg, #1c2b36 0%, var(--primary-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.media-heading p {
+    color: #4a5568;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.media-row-label {
+    width: 95%;
+    max-width: 1300px;
+    margin: 0 auto 20px;
+    color: #4a5568;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.media-row-label .icon {
+    font-size: 18px;
+}
+
+/* Seamless infinite scroll fading edges */
+.scroll-wrapper {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.scroll-track {
+    display: flex;
+    gap: 24px;
+    padding: 20px 0 40px; /* Extra bottom padding for hover shadows */
+    width: max-content;
+    will-change: transform;
+    transition: animation-play-state 0.3s ease;
+}
+
+.scroll-track:hover {
+    animation-play-state: paused;
+}
+
+.scroll-ltr { animation: scrollLTR 40s linear infinite; }
+.scroll-rtl { animation: scrollRTL 40s linear infinite; }
+
+@keyframes scrollLTR {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@keyframes scrollRTL {
+    0%   { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+}
+
+/* Premium Card Design */
+.media-card {
+    position: relative;
+    width: 320px;
+    height: 200px;
+    border-radius: 20px;
+    overflow: hidden;
+    flex-shrink: 0;
+    cursor: pointer;
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    /* 3D tilt perspective handled via JS or hover fallback */
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1);
+}
+
+.media-card:hover {
+    transform: perspective(1000px) rotateX(2deg) rotateY(2deg) scale(1.05);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(240, 193, 91, 0.15);
+    border-color: rgba(240,193,91,0.5);
+    z-index: 10;
+}
+
+.media-card img,
+.media-card video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.media-card:hover img,
+.media-card:hover video {
+    transform: scale(1.1);
+}
+
+/* Glassmorphism Hover Overlay */
+.card-glass-overlay {
+    position: absolute;
+    bottom: -10px;
+    left: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: all 0.4s ease;
+}
+
+.media-card:hover .card-glass-overlay {
+    bottom: 15px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card-title {
+    color: #1c2b36;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 70%;
+}
+
+.view-btn {
+    font-size: 11px;
+    color: var(--primary-gold);
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    background: rgba(0,0,0,0.05);
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+/* Glassy Play Icon */
+.glass-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    width: 56px;
+    height: 56px;
+    background: rgba(240, 193, 91, 0.3);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(240, 193, 91, 0.6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    pointer-events: none;
+}
+
+.media-card:hover .glass-icon {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.2);
+}
+
+/* Lightbox Modal Styles */
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    padding: 50px 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(112, 189, 95, 0.95);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.lightbox.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    opacity: 1;
+}
+
+.lightbox-content {
+    max-width: 90%;
+    max-height: 80vh;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.lightbox.active .lightbox-content {
+    transform: scale(1);
+}
+
+#lightbox-caption {
+    margin-top: 20px;
+    color: var(--primary-gold);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    color: #1c2b36;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+    background: rgba(0,0,0,0.05);
+    width: 50px; height: 50px;
+    display: flex; justify-content: center; align-items: center;
+    border-radius: 50%;
+}
+
+.lightbox-close:hover,
+.lightbox-close:focus {
+    color: var(--primary-gold);
+    background: rgba(255,255,255,0.2);
+}
+
+@media (max-width: 768px) {
+    .media-heading h2 { font-size: 32px; }
+    .media-card { width: 240px; height: 150px; }
+    .scroll-track { gap: 16px; }
+    .lightbox-content { max-width: 95%; max-height: 70vh; }
+    .lightbox-close { top: 15px; right: 15px; width: 40px; height: 40px; font-size: 30px; }
+}
+</style>
+
+<script>
+// ============================================
+// ULTRA-PREMIUM JAVASCRIPT LOGIC
+// ============================================
+
+// 1. Smart Seamless Cloning
+function setupLoop(trackId) {
+    const track = document.getElementById(trackId);
+    if (!track) return;
+    const items = Array.from(track.children);
+    if (items.length === 0) return;
+    
+    // Only clone and animate if there are 4 or more items
+    if (items.length < 4) {
+        track.style.animation = 'none';
+        track.style.justifyContent = 'center';
+        track.style.width = '100%';
+        return;
+    }
+    
+    // Clone twice to ensure perfect seamless loop even on ultra-wide screens
+    const cloneCount = 2; 
+    for(let i=0; i<cloneCount; i++) {
+        items.forEach(item => {
+            const clone = item.cloneNode(true);
+            const vid = clone.querySelector('video');
+            if (vid) {
+                vid.onmouseenter = function(){ this.play(); };
+                vid.onmouseleave = function(){ this.pause(); };
+            }
+            track.appendChild(clone);
+        });
+    }
+}
+
+setupLoop('imgTrack');
+setupLoop('vidTrack');
+
+// 2. Battery Saver: Pause when tab hidden
+document.addEventListener('visibilitychange', () => {
+    document.querySelectorAll('.scroll-track').forEach(track => {
+        track.style.animationPlayState = document.hidden ? 'paused' : 'running';
+    });
+});
+
+// 3. Performance: Intersection Observer to pause off-screen animations
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (!entry.target.matches(':hover')) {
+            entry.target.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
+        }
+    });
+}, { threshold: 0.1 });
+
+// Ensure we observe tracks
+const tracks = document.querySelectorAll('.scroll-track');
+tracks.forEach(t => observer.observe(t));
+
+// Handle mouse enter/leave restoring the correct state
+tracks.forEach(track => {
+    track.addEventListener('mouseleave', () => {
+        // Only resume if it's currently in the viewport
+        const rect = track.getBoundingClientRect();
+        const inView = rect.top < window.innerHeight && rect.bottom > 0;
+        if(inView) {
+            track.style.animationPlayState = 'running';
+        }
+    });
+});
+
+
+// 4. Video Interactivity (Fullscreen & Smart Pause)
+function attachVideoListeners() {
+    document.querySelectorAll('.vid-card video').forEach(video => {
+        if (!video.dataset.init) {
+            video.dataset.init = 'true';
+            
+            // Fullscreen on click
+            video.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (video.requestFullscreen) {
+                    video.requestFullscreen().then(() => video.play()).catch(console.error);
+                } else if (video.webkitRequestFullscreen) {
+                    video.webkitRequestFullscreen();
+                    video.play();
+                }
+            });
+
+            // Pause all others when playing
+            video.addEventListener('play', () => {
+                document.querySelectorAll('.vid-card video').forEach(v => {
+                    if (v !== video) v.pause();
+                });
+            });
+        }
+    });
+}
+attachVideoListeners();
+
+// 5. Image Lightbox Logic
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const lightboxCaption = document.getElementById('lightbox-caption');
+
+function openLightbox(imgSrc, title) {
+    if(!imgSrc) return;
+    lightboxImg.src = imgSrc;
+    lightboxCaption.textContent = title || '';
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden'; // prevent background scrolling
+}
+
+function closeLightbox() {
+    lightbox.classList.remove('active');
+    setTimeout(() => { lightboxImg.src = ''; }, 300); // clear after transition
+    document.body.style.overflow = '';
+}
+
+// Close lightbox on outside click
+lightbox.addEventListener('click', (e) => {
+    if(e.target === lightbox) closeLightbox();
+});
+
+// Close lightbox on Escape key
+document.addEventListener('keydown', (e) => {
+    if(e.key === "Escape" && lightbox.classList.contains('active')) {
+        closeLightbox();
+    }
+});
+</script>
+{% endif %}

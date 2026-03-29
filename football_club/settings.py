@@ -23,10 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-w36he)($*n++hz^__qe=b&(yw*55it1##r*rxk_j47izyid6a#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.2', '172.19.192.1','https://football-club-3.onrender.com/']
-# Example: ALLOWED_HOSTS = ['127.0.0.1', '192.168.1.15','192.168.1.5']
+ALLOWED_HOSTS = ['.onrender.com']# Example: ALLOWED_HOSTS = ['127.0.0.1', '192.168.1.15','192.168.1.5']
 
 
 
@@ -47,13 +46,15 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  
+
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'football_club.urls'
-
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

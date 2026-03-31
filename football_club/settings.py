@@ -143,3 +143,6 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 104857600   # 100 MB per file
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+##admin Access
+ADMIN_EMAIL = "barammanik@gmail.com"

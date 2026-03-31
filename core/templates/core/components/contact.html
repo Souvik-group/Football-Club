@@ -1,73 +1,54 @@
 {% load static %}
-
+<link rel="stylesheet" href="{% static 'css/contact.css' %}">
 <section class="contact-section" id="contact">
+
     <div class="contact-container">
-        
-        <div class="contact-header">
-            <h2 class="contact-title">Reach Out to Us</h2>
-            <p class="contact-subtitle">Have questions about the club, trials, or sponsorships? Drop us a message and our team will get back to you shortly.</p>
-        </div>
 
-        <div class="contact-grid">
-            
-            <!-- Left Info Panel -->
-            <div class="contact-info-glass">
-                <div class="info-item">
-                    <div class="info-icon">📍</div>
-                    <div class="info-text">
-                        <h4>Headquarters</h4>
-                        <p>Arjungeria, West Bengal</p>
-                    </div>
-                </div>
+        <!-- Left Info -->
+        <div class="contact-info">
+            <h2>Contact Us</h2>
+            <p>Have questions or want to join our club? Reach out to us anytime!</p>
 
-                <div class="info-item">
-                    <div class="info-icon">✉️</div>
-                    <div class="info-text">
-                        <h4>Email Us</h4>
-                        <p>arjungeriaagnisangha2013@gmail.com</p>
-                    </div>
-                </div>
-
-                <div class="info-item">
-                    <div class="info-icon">📞</div>
-                    <div class="info-text">
-                        <h4>Call Us</h4>
-                        <p>+91 79085 94499</p>
-                    </div>
-                </div>
+            <div class="info-box">
+                <span>📍</span>
+                <p>Arjungeria, West Bengal, india</p>
             </div>
 
-            <!-- Right Form Panel -->
-            <div class="contact-form-glass">
-                <form action="#" method="POST">
-                    <div class="form-group">
-                        <label for="fname">First Name</label>
-                        <input type="text" id="fname" name="fname" class="form-input" placeholder="e.g. John" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="lname">Last Name</label>
-                        <input type="text" id="lname" name="lname" class="form-input" placeholder="e.g. Doe" required>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" class="form-input" placeholder="john@example.com" required>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="message">Your Message</label>
-                        <textarea id="message" name="message" class="form-input" placeholder="How can we help you?" required></textarea>
-                    </div>
-
-                    <div class="submit-wrap">
-                        <button type="submit" class="btn-cinematic">
-                            Send Message <span>🚀</span>
-                        </button>
-                    </div>
-                </form>
+            <div class="info-box">
+                <span>📞</span>
+                <p>+91 9876543210</p>
             </div>
 
+            <div class="info-box">
+                <span>📧</span>
+                <p>arjungeriaagnisangha2013@gmail.com</p>
+            </div>
         </div>
+
+        <!-- Right Form -->
+        <div class="contact-form">
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="input-group">
+                    <input type="text" name="name" required>
+                    <label>Your Name</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="email" name="email" required>
+                    <label>Your Email</label>
+                </div>
+
+                <div class="input-group">
+                    <textarea name="message" rows="5" required></textarea>
+                    <label>Your Message</label>
+                </div>
+
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+
     </div>
+
 </section>

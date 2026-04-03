@@ -10,9 +10,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
-print("CLOUD:", os.getenv('CLOUDINARY_CLOUD_NAME'))
-print("KEY:", os.getenv('CLOUDINARY_API_KEY'))
-
 SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key')
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'

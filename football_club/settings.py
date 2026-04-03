@@ -18,7 +18,6 @@ ALLOWED_HOSTS = ['.onrender.com', '127.0.0.1', 'localhost', '*']
 
 INSTALLED_APPS = [
     'cloudinary',
-    'cloudinary_storage',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -124,10 +123,9 @@ STORAGES = {
         'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
     },
     'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
     },
 }
 
-# Compatibility for older packages
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

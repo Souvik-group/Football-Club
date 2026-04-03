@@ -14,6 +14,11 @@
                     <li><a href="{% url 'home' %}">Home</a></li>
                     <li><a href="{% url 'about_page' %}">About Us</a></li>
                     <li><a href="{% url 'team_page' %}">Meet the Team</a></li>
+                    <li>
+                        <a href="#" onclick="toggleMembersPopup(); return false;">👥 View Joined Members
+                            {% if join_members %}<span style="background:#50d268;color:#030d08;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:6px;">{{ join_members|length }}</span>{% endif %}
+                        </a>
+                    </li>
                 </ul>
             </div>
             
@@ -225,4 +230,93 @@
             text-align: center;
         }
     }
+
+    /* Members Popup */
+    .members-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(6px);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+    }
+    .members-overlay.active { display: flex; }
+    .members-popup {
+        background: #0a2e1f;
+        border: 1px solid rgba(80,210,104,0.2);
+        border-radius: 16px;
+        padding: 32px;
+        width: 90%;
+        max-width: 500px;
+        max-height: 80vh;
+        overflow-y: auto;
+        position: relative;
+    }
+    .members-popup h3 {
+        color: #50d268;
+        font-size: 20px;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+    .members-popup .close-btn {
+        position: absolute;
+        top: 16px; right: 20px;
+        background: none;
+        border: none;
+        color: #a8b5a0;
+        font-size: 24px;
+        cursor: pointer;
+        line-height: 1;
+    }
+    .member-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        color: #dbe5d8;
+        font-size: 14px;
+    }
+    .member-row:last-child { border-bottom: none; }
+    .member-row .name { font-weight: 600; }
+    .member-row .meta { color: #6d7b65; font-size: 12px; }
+    .no-members { color: #6d7b65; text-align: center; padding: 20px 0; }
 </style>
+
+<!-- Members Popup -->
+<div class="members-overlay" id="membersOverlay" onclick="if(event.target===this) toggleMembersPopup()">
+    <div class="members-popup">
+        <button class="close-btn" onclick="toggleMembersPopup()">&times;</button>
+        <h3>👥 Joined Members
+            {% if join_members %}<span style="background:#50d268;color:#030d08;font-size:12px;padding:2px 10px;border-radius:20px;margin-left:8px;">{{ join_members|length }}</span>{% endif %}
+        </h3>
+        {% if join_members %}
+            {% for member in join_members %}
+            <div class="member-row">
+                <div>
+                    <div class="name">{{ member.name }}</div>
+                    <div class="meta">Age: {{ member.age }} &bull; {{ member.phone }}</div>
+                </div>
+                <div class="meta">{{ member.email }}</div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-members">No members have joined yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function toggleMembersPopup() {
+    document.getElementById('membersOverlay').classList.toggle('active');
+    document.body.style.overflow = document.getElementById('membersOverlay').classList.contains('active') ? 'hidden' : '';
+}
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.getElementById('membersOverlay').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+});
+</script>

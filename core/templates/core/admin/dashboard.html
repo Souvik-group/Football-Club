@@ -258,6 +258,7 @@ body {
         <a href="{% url 'event_manage' %}"><span class="icon">📅</span> Events</a>
         <a href="{% url 'media_manage' %}"><span class="icon">🖼️</span> Media</a>
         <a href="{% url 'announcement_manage' %}"><span class="icon">📢</span> Announcements</a>
+        <a href="{% url 'members_manage' %}"><span class="icon">🙋</span> Joined Members</a>
     </nav>      
 
     <div class="sidebar-bottom">
@@ -320,6 +321,11 @@ body {
             <div class="card-icon">📢</div>
             <div class="card-num">{{ announcement_count }}</div>
             <div class="card-label">Announcements</div>
+        </div>
+        <div class="card" onclick="window.location='{% url 'members_manage' %}'" style="cursor:pointer">
+            <div class="card-icon">🙋</div>
+            <div class="card-num">{{ members_count }}</div>
+            <div class="card-label">Joined Members</div>
         </div>
     </div>
 </div>

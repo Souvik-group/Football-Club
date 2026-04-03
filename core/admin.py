@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import News, Media, Announcement, Event
+from .models import News, Media, Announcement, Event, TeamMember, ContactMessage
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
@@ -25,6 +25,26 @@ class AnnouncementAdmin(admin.ModelAdmin):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = ('title', 'type', 'date', 'venue')
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'created_at', 'is_read')
+    list_filter = ('is_read', 'created_at')
+    search_fields = ('name', 'email', 'message')
+    readonly_fields = ('created_at',)
+    
+    fieldsets = (
+        ('Message Info', {
+            'fields': ('name', 'email', 'created_at')
+        }),
+        ('Message Content', {
+            'fields': ('message',)
+        }),
+        ('Status', {
+            'fields': ('is_read',)
+        }),
+    )
 
 
 

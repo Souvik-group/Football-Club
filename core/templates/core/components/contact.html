@@ -23,31 +23,85 @@
                 <span>📧</span>
                 <p>arjungeriaagnisangha2013@gmail.com</p>
             </div>
+
         </div>
 
         <!-- Right Form -->
         <div class="contact-form">
-            <form method="POST">
+            <form method="POST" action="{% url 'contact_message' %}" id="contactForm" onsubmit="handleSubmit(event)">
                 {% csrf_token %}
 
                 <div class="input-group">
-                    <input type="text" name="name" required>
+                    <input type="text" name="name" id="name" required minlength="2" maxlength="100">
                     <label>Your Name</label>
                 </div>
 
                 <div class="input-group">
-                    <input type="email" name="email" required>
+                    <input type="email" name="email" id="email" required>
                     <label>Your Email</label>
                 </div>
 
                 <div class="input-group">
-                    <textarea name="message" rows="5" required></textarea>
+                    <textarea name="message" id="message" rows="5" required minlength="10" maxlength="1000"></textarea>
                     <label>Your Message</label>
                 </div>
 
-                <button type="submit">Send Message</button>
+                <button type="submit" id="submitBtn" style="position: relative; overflow: hidden;">
+                    <span id="btnText">Send Message</span>
+                    <span id="btnLoader" style="display: none; margin-left: 8px;">⏳</span>
+                </button>
             </form>
         </div>
+
+        <script>
+            function handleSubmit(event) {
+                const form = document.getElementById('contactForm');
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const message = document.getElementById('message').value.trim();
+                const submitBtn = document.getElementById('submitBtn');
+                const btnText = document.getElementById('btnText');
+                const btnLoader = document.getElementById('btnLoader');
+
+                // Validation
+                if (!name || !email || !message) {
+                    event.preventDefault();
+                    alert('❌ Please fill in all fields!');
+                    return;
+                }
+
+                if (message.length < 10) {
+                    event.preventDefault();
+                    alert('❌ Message must be at least 10 characters!');
+                    return;
+                }
+
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.6';
+                btnText.textContent = 'Sending...';
+                btnLoader.style.display = 'inline';
+
+                // Submit the form after validation
+                setTimeout(() => {
+                    form.submit();
+                }, 500);
+            }
+
+            // Clear loading state if user goes back
+            window.addEventListener('pageshow', function(event) {
+                const submitBtn = document.getElementById('submitBtn');
+                const btnText = document.getElementById('btnText');
+                const btnLoader = document.getElementById('btnLoader');
+                
+                if (event.persisted) {  // User came back from another page
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    btnText.textContent = 'Send Message';
+                    btnLoader.style.display = 'none';
+                }
+            });
+        </script>
 
     </div>
 

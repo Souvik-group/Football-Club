@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP - Arjungeria Agni Sangha Football Club</title>
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <style>
+        body {
+            background-color: #05140d;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: linear-gradient(135deg, #0a2e1f, #0f3d28);
+            border: 1px solid rgba(240,193,91,0.3);
+            border-radius: 16px;
+            padding: 36px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .logo {
+            width: 50px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #f0c15b;
+            margin: 0 0 10px 0;
+        }
+        p {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 20px;
+        }
+        form {
+            margin-top: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #f0c15b;
+            color: #0a2e1f;
+            font-weight: 700;
+            font-size: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #e0b040;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #f0c15b;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="{% static 'images/logo.png' %}" alt="Club Logo" class="logo">
+        <h2>Verify Your Email</h2>
+        <p>We've sent a 6-digit OTP to <strong>{{ join_request.email }}</strong>. Please enter it below to complete your registration.</p>
+        
+        {% if error %}
+        <p style="color: #ff6b6b; font-weight: bold;">{{ error }}</p>
+        {% endif %}
+        
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="otp" placeholder="Enter 6-digit OTP" maxlength="6" required>
+            <button type="submit">Verify & Join</button>
+        </form>
+        
+        <form method="POST" style="margin-top: 20px;">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="resend">
+            <button type="submit" style="background: #ffa500; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer;">Resend OTP</button>
+        </form>
+        
+        <a href="{% url 'home' %}" class="back-link">← Back to Home</a>
+    </div>
+</body>
+</html>

@@ -67,12 +67,85 @@
     </div>
 </div>
 
+<!-- Messages Display -->
+{% if messages %}
+<div id="messages-container" style="position: fixed; top: 80px; right: 20px; z-index: 9999; max-width: 400px;">
+    {% for message in messages %}
+    <div class="message-alert message-{{ message.tags }}" style="
+        margin-bottom: 10px;
+        padding: 16px 20px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 500;
+        animation: slideIn 0.4s ease-out;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        {% if message.tags == 'success' %}
+            background: #10b981;
+            color: white;
+        {% elif message.tags == 'error' %}
+            background: #ef4444;
+            color: white;
+        {% else %}
+            background: #3b82f6;
+            color: white;
+        {% endif %}
+    ">
+        <span style="font-size: 18px;">
+            {% if message.tags == 'success' %}✅{% elif message.tags == 'error' %}❌{% else %}ℹ️{% endif %}
+        </span>
+        <span>{{ message }}</span>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(400px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    @keyframes slideOut {
+        from {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(400px);
+        }
+    }
+    .message-alert {
+        animation: slideOut 0.4s ease-out 4s forwards !important;
+    }
+</style>
+
+<script>
+    // Auto-hide messages after 4 seconds
+    setTimeout(function() {
+        const container = document.getElementById('messages-container');
+        if (container) {
+            container.remove();
+        }
+    }, 4800);
+</script>
+{% endif %}
+
 {% include "core/components/navbar.html" %}
+{% include "core/components/join_modal.html" %}
 {% include "core/components/hero.html" %}
 {% include "core/components/announcement.html" %}
 {% include "core/components/about.html" %}
 {% include "core/components/upcoming.html" %}
 {% include "core/components/media.html" %}
+{% include "core/components/members_wall.html" %}
 {% include "core/components/contact.html" %}
 {% include "core/components/footer.html" %}
 
@@ -88,6 +161,15 @@ window.addEventListener("load", function(){
         }, 2500);
     }
 });
+
+function toggleJoinList() {
+    const list = document.getElementById('join-list');
+    if (list.style.display === 'none') {
+        list.style.display = 'block';
+    } else {
+        list.style.display = 'none';
+    }
+}
 </script>
 
 </body>

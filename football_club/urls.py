@@ -19,12 +19,16 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.http import HttpResponse
-from django.views.decorators.http import condition
 
 def robots_view(request):
-    """Serve robots.txt from static files"""
-    with open(settings.STATIC_ROOT / 'robots.txt', 'r') as f:
-        return HttpResponse(f.read(), content_type='text/plain')
+    content = """User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /admin-login/
+Disallow: /admin-logout/
+Sitemap: https://arjungeria.onrender.com/sitemap.xml"""
+    return HttpResponse(content, content_type='text/plain')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

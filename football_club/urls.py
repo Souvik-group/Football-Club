@@ -19,21 +19,41 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.http import HttpResponse
+from django.utils import timezone
+
+SITE_URL = 'https://arjungeria-agni-sangha-glvz.onrender.com'
 
 def robots_view(request):
-    content = """User-agent: *
+    content = f"""User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /admin-login/
 Disallow: /admin-logout/
-Sitemap: https://arjungeria-agni-sangha-glvz.onrender.com/sitemap.xml"""
+Sitemap: {SITE_URL}/sitemap.xml"""
     return HttpResponse(content, content_type='text/plain')
+
+def sitemap_view(request):
+    from core.models import News, Event
+    urls = [
+        {'loc': f'{SITE_URL}/', 'priority': '1.0', 'changefreq': 'daily'},
+        {'loc': f'{SITE_URL}/news/', 'priority': '0.8', 'changefreq': 'weekly'},
+        {'loc': f'{SITE_URL}/events/', 'priority': '0.8', 'changefreq': 'weekly'},
+        {'loc': f'{SITE_URL}/team/', 'priority': '0.7', 'changefreq': 'monthly'},
+        {'loc': f'{SITE_URL}/about/', 'priority': '0.6', 'changefreq': 'monthly'},
+    ]
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    for u in urls:
+        xml += f'  <url><loc>{u["loc"]}</loc><changefreq>{u["changefreq"]}</changefreq><priority>{u["priority"]}</priority></url>\n'
+    xml += '</urlset>'
+    return HttpResponse(xml, content_type='application/xml')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
     path('robots.txt', robots_view, name='robots'),
+    path('sitemap.xml', sitemap_view, name='sitemap'),
 ]
 
 # Serve media files during development

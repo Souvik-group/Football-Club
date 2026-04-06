@@ -18,10 +18,18 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import HttpResponse
+from django.views.decorators.http import condition
+
+def robots_view(request):
+    """Serve robots.txt from static files"""
+    with open(settings.STATIC_ROOT / 'robots.txt', 'r') as f:
+        return HttpResponse(f.read(), content_type='text/plain')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
+    path('robots.txt', robots_view, name='robots'),
 ]
 
 # Serve media files during development

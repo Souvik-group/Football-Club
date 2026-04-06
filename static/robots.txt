@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /admin-login/
+Disallow: /admin-logout/
+Sitemap: https://arjungeria.onrender.com/sitemap.xml

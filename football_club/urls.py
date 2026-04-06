@@ -27,7 +27,7 @@ Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /admin-login/
 Disallow: /admin-logout/
-Sitemap: https://arjungeria.onrender.com/sitemap.xml"""
+Sitemap: https://arjungeria-agni-sangha-glvz.onrender.com/sitemap.xml"""
     return HttpResponse(content, content_type='text/plain')
 
 urlpatterns = [
